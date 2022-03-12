@@ -17,6 +17,10 @@ Mini-Aspire API is an app that allows authenticated users to go through a loan a
 ## Installation
 Please follow the following steps fto install this app.
 
+### System Pre-requisites
+1. PHP **version 8.0** or above. (https://www.apachefriends.org/download.html)
+2. Composer (https://getcomposer.org/download/)
+
 ## Documentation
 This documentation contains all the specifics of the app.
 
