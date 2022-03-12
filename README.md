@@ -21,10 +21,16 @@ Please follow the following steps fto install this app.
 1. PHP **version 8.0** or above. (https://www.apachefriends.org/download.html)
 2. Composer (https://getcomposer.org/download/)
 3. git - to colne the repository from command line
+4. Postman - to test the APIs
 
 ### Project Installation Commands
-`git clone https://github.com/Nithiya99/loan-api.git`
-`LALALA`
+```
+git clone https://github.com/Nithiya99/loan-api.git
+composer update
+add .env and update database settings
+php artisan migrate:fresh --seed
+php artisan serve
+```
 
 ## Documentation
 This documentation contains all the specifics of the app.
