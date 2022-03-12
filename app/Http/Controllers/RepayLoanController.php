@@ -4,16 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Validator;
 use App\Models\Loan;
 use App\Models\LoanPayment;
 
 class RepayLoanController extends Controller
 {
     public function payLoan(Request $req){
+        // Validating inputs
+        $rules = array(
+            "user_id"=>"required",
+            "loan_id"=>"required",
+            "amount"=>"required"
+       );
+       $validator = Validator::make($req->all(), $rules);
+       if($validator->fails()){
+           return $validator->errors(); 
+       }
+
+        // These arrays will be used to store and send custom responses.
         $errorOutput = array(
             'error' => true,
             'code' => 500
-        ); //The response message will be stored here.
+        ); 
         $successOutput = array(
             'error'=>false,
             'code'=>200

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Validator;
 use App\Models\Loan;
 use App\Models\LoanPayment;
 use App\Models\User;
@@ -26,6 +27,19 @@ class LoanController extends Controller
     }
 
     public function createLoan(Request $req){
+
+        // Validating inputs
+        $rules = array(
+             "loan_amt"=>"required|max:8",
+             "loan_terms"=>"required",
+             "cust_id"=>"required"
+        );
+        $validator = Validator::make($req->all(), $rules);
+        if($validator->fails()){
+            return $validator->errors(); 
+        }
+
+        // If no errors in inputs, function continues
         $user = User::find($req->cust_id);
         if($user){
             if($user->user_type==="Client"){
@@ -87,6 +101,16 @@ class LoanController extends Controller
     }
 
     public function updateLoan(Request $req){
+        // Validating inputs
+        $rules = array(
+            "user_id"=>"required",
+            "loan_id"=>"required",
+       );
+       $validator = Validator::make($req->all(), $rules);
+       if($validator->fails()){
+           return $validator->errors(); 
+       }
+
         $user = User::find($req->user_id);
         if($user){
             if($user->user_type==="Admin"){
