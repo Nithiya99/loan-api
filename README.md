@@ -34,6 +34,7 @@ php artisan serve
 
 ## Documentation
 This documentation contains all the specifics of the app.
+https://github.com/Nithiya99/loan-api/blob/master/APIs.md
 
 ## License
 
