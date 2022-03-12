@@ -20,6 +20,11 @@ Please follow the following steps fto install this app.
 ### System Pre-requisites
 1. PHP **version 8.0** or above. (https://www.apachefriends.org/download.html)
 2. Composer (https://getcomposer.org/download/)
+3. git - to colne the repository from command line
+
+### Project Installation Commands
+`git clone https://github.com/Nithiya99/loan-api.git`
+`LALALA`
 
 ## Documentation
 This documentation contains all the specifics of the app.
