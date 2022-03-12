@@ -16,7 +16,7 @@ class RepayLoanController extends Controller
         $rules = array(
             "user_id"=>"required",
             "loan_id"=>"required",
-            "amount"=>"required"
+            "amount"=>"required|gt:0"
        );
        $validator = Validator::make($req->all(), $rules);
        if($validator->fails()){
@@ -32,7 +32,7 @@ class RepayLoanController extends Controller
             // Finding the loan record
             $loan=Loan::find($loanId);
             if(!$loan or $loan->cust_id!==$userId){
-                return $this->returnErrorRespose("Please check your loanId and UserId. Details do not match.");
+                return $this->returnResponse(["message"=>"Please check your loanId and UserId. Details do not match."], 400, true);
             } 
 
             $loanTotalAmount = $loan->loan_amt;
@@ -58,6 +58,7 @@ class RepayLoanController extends Controller
             $partiallyPaidMsg = " ";
             $loanClosedMsg = " ";
 
+            
             for($idx=0; $idx<$loanPmtCount; $idx++){
                 $currLoanPmt = $loanPmts[$idx];
 
