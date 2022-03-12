@@ -19,3 +19,7 @@ Please follow the following steps fto install this app.
 
 ## Documentation
 This documentation contains all the specifics of the app.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
