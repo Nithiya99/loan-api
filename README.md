@@ -14,5 +14,8 @@ Mini-Aspire API is an app that allows authenticated users to go through a loan a
 2. Admin approve loan
 3. Fill in the rest
 
-### Installation
+## Installation
 Please follow the following steps fto install this app.
+
+## Documentation
+This documentation contains all the specifics of the app.
