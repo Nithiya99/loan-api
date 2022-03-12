@@ -10,6 +10,10 @@ use Illuminate\Http\JsonResponse;
 
 class Controller extends BaseController
 {
+    const PAID = "PAID";
+    const PENDING = "PENDING";
+    const APPROVED = "APPROVED";
+    
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     // Unauthorized Error Response
@@ -26,8 +30,8 @@ class Controller extends BaseController
         return response() -> json([
             'message' => $msg,
             'error' => true,
-            'code' => 500
-        ], 500);
+            'code' => 400
+        ], 400);
     }
 
     public function returnSuccessResponse($msg, $data){
@@ -37,4 +41,37 @@ class Controller extends BaseController
             'code' => 200
         ], 200);
     }
+
+    public function returnResponse($msg, $code, $err){
+        $output = array(
+            'error' => $err,
+            'code' => $code
+        ); 
+        $output = array_merge($msg, $output);
+
+        return response() -> json([$output], $code);
+    }
+
+
+    public function returnPositiveRespose($msg, $code){
+        $successOutput = array(
+            'error' => false,
+            'code' => $code
+        ); 
+        $successOutput = array_merge($msg, $successOutput);
+
+        return response() -> json([$errorOutput], $code);
+    }   
+
+    public function returnErrRespose($msg, $code){
+        $errorOutput = array(
+            'error' => true,
+            'code' => $code
+        ); 
+        $errorOutput = array_merge($msg, $errorOutput);
+
+        return response() -> json([$errorOutput], $code);
+    }   
+
+
 }

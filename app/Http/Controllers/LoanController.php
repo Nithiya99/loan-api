@@ -11,18 +11,26 @@ use App\Models\User;
 
 class LoanController extends Controller
 {
+    const ADMIN = "Admin";
+    const CLIENT = "Client";
     
     public function getLoans(){
         return Loan::all();
     }
 
     public function getLoansByCustId($custId){
-        $data = Loan::where('cust_id', $custId)->get();
-        if(count($data)===0){
-            return $this->returnErrorRespose("No loans found for your ID. Please check your ID.");
-        } else{
-            return $this->returnSuccessResponse("Loans you have applied for", $data);
+        try {
+            $data = Loan::where('cust_id', $custId)->get();
+
+            if(count($data)===0){
+                return $this->returnResponse(["Loan Found"=>"None - Please check yuor ID"], 400, true);
+            } else{
+                return $this->returnResponse(["Loan Found"=>$data], 200, false);
+            }
         }
+        catch(\Exception $e) {
+            return $this->returnResponse(["SQL Exception"=>$e->getMessage()], 500, true);
+        } 
         // return Loan::where('cust_id', $custId)->get();
     }
 
@@ -36,35 +44,35 @@ class LoanController extends Controller
         );
         $validator = Validator::make($req->all(), $rules);
         if($validator->fails()){
-            return $validator->errors(); 
-        }
+            return $this->returnResponse(["Validation Errors"=>$validator->errors()], 400, true);
+       }
 
-        // If no errors in inputs, function continues
-        $user = User::find($req->cust_id);
-        if($user){
-            if($user->user_type==="Client"){
-                $loan = new Loan;
-                // $loan->loan_id=$req->loan_id;
-                $loan->loan_amt=$req->loan_amt;
-                $loan->loan_terms=$req->loan_terms;
-                $loan->loan_status="PENDING";
-                $loan->cust_id=$req->cust_id;
-                $result=$loan->save();
-                if($result){
-                    return $this->createLoanPmts($loan);
-                    // return ["Result"=>"Loan created successfully"];
-                    
-                    // return $result;
-                } else {
-                    return $this->returnErrorRespose("Loan creation failed.");
-                }
-            } else {
-                return $this->returnUnauthorizedResponse();
-            }
+        try{
+            $user = User::find($req->cust_id);
+            if(!$user)
+               return $this->returnResponse(["message"=>"No User Found"], 400, true);
+            if($user->user_type!==$this::CLIENT)
+                return $this->returnResponse(["message"=>"User is not a Client"], 400, true);
+
+            
+            DB::beginTransaction();
+            $loan = new Loan;
+            $loan->loan_amt=$req->loan_amt;
+            $loan->loan_terms=$req->loan_terms;
+            $loan->loan_status=$this::PENDING;
+            $loan->cust_id=$req->cust_id;
+            $result=$loan->save();
+
+            $this->createLoanPmts($loan);
+           DB::commit();
+
+           return $this->returnResponse(["message"=>$loan], 200, false);
+
         }
-        else {
-            return $this->returnUnauthorizedResponse();
-        }
+        catch(\Exception $e) {
+            DB::rollBack();
+            return $this->returnResponse(["SQL Exception"=>$e->getMessage()], 500, true);
+        } 
     }
 
     public function createLoanPmts($loan){
@@ -87,17 +95,8 @@ class LoanController extends Controller
 
             $loanPmt->loan_pmt_status=$loan->loan_status;
             $loanPmt->loan_pmt_date=$loan->created_at->addDays($i*7);
-            $result=$loanPmt->save();
+            $loanPmt->save();
         }
-        if($result){
-            // return ["Result"=>"Loan fully created successfully"];
-            return $this->returnSuccessResponse("Loan applied successfully!", $loan);
-            
-            // return $result;
-        } else {
-            return  $this->returnErrorRespose("Loan creation failed");
-        }
-        // return["Result"=>$loan];
     }
 
     public function updateLoan(Request $req){
@@ -107,41 +106,36 @@ class LoanController extends Controller
             "loan_id"=>"required",
        );
        $validator = Validator::make($req->all(), $rules);
+
        if($validator->fails()){
-           return $validator->errors(); 
+            return $this->returnResponse(["Validation Errors"=>$validator->errors()], 400, true);
        }
 
-        $user = User::find($req->user_id);
-        if($user){
-            if($user->user_type==="Admin"){
-                $loan=Loan::find($req->loan_id);
-                if($loan){
-                    if($loan->loan_status === "PENDING"){
-                        $loan->loan_status="APPROVED";
-                        $loan->loan_approve_id = $req->user_id;
-                        $loan->loan_approve_date = now();
-                        $result=$loan->save();
-                        if($result){
-                            return $this->returnSuccessResponse("Loan status changed to APPROVED!", $loan);
-                            // return $result;
-                        } else {
-                            return ["Result"=>"Loan updation Failed!"];
-                        }
-                    } elseif($loan->loan_status === "PAID") {
-                        return  $this->returnErrorRespose("Loan is already PAID.");
-                    } else {
-                        return  $this->returnErrorRespose("Loan is already APPROVED.");
-                    }
-                }
-                else {
-                    return  $this->returnErrorRespose("There is no loan applied with the given ID!");
-                }
-            } else {
-                return $this->returnUnauthorizedResponse();
-            }
-        } else {
-            return $this->returnUnauthorizedResponse();
-        }
+       try{
+           $loan=Loan::find($req->loan_id);
+           if(!$loan)
+                return $this->returnResponse(["message"=>"Loan does not exist"], 400, true);
+            if($loan->loan_status === $this::APPROVED or $loan->loan_status === $this::PAID)
+                return $this->returnResponse(["message"=>"Loan status is already PAID or APPROVED"], 400, true);
+
+           $user = User::find($req->user_id);
+           if(!$user)
+               return $this->returnResponse(["message"=>"No User Found"], 400, true);
+            if($user->user_type!==$this::ADMIN)
+                return $this->returnResponse(["message"=>"User is not Admin"], 400, true);
+
+           DB::beginTransaction();
+           $loan->loan_status=$this::APPROVED;
+           $loan->loan_approve_id = $req->user_id;
+           $loan->loan_approve_date = now();
+           $result=$loan->save();
+           DB::commit();
+           return $this->returnResponse(["message"=>$loan], 200, false);
+       }
+       catch(\Exception $e) {
+            DB::rollBack();
+            return $this->returnResponse(["SQL Exception"=>$e->getMessage()], 500, true);
+        } 
         
     }
 }

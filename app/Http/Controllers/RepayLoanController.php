@@ -10,6 +10,7 @@ use App\Models\LoanPayment;
 
 class RepayLoanController extends Controller
 {
+    const FIRSTROW = 0;
     public function payLoan(Request $req){
         // Validating inputs
         $rules = array(
@@ -21,165 +22,81 @@ class RepayLoanController extends Controller
        if($validator->fails()){
            return $validator->errors(); 
        }
+        
+       // Extracting details fron $req
+       $loanId = $req->loan_id;
+       $moneySent = $req->amount;
+       $userId = $req->user_id;
+       try{
+            DB::beginTransaction();
+            // Finding the loan record
+            $loan=Loan::find($loanId);
+            if(!$loan or $loan->cust_id!==$userId){
+                return $this->returnErrorRespose("Please check your loanId and UserId. Details do not match.");
+            } 
 
-        // These arrays will be used to store and send custom responses.
-        $errorOutput = array(
-            'error' => true,
-            'code' => 500
-        ); 
-        $successOutput = array(
-            'error'=>false,
-            'code'=>200
-        );
-
-        // Extracting details fron $req
-        $loanId = $req->loan_id;
-        $moneySent = $req->amount;
-        $userId = $req->user_id;
-
-        // Finding the loan record
-        $loan=Loan::find($loanId);
-        if(!$loan or $loan->cust_id!==$userId){
-            return $this->returnErrorRespose("Please check your loanId and UserId. Details do not match.");
-        } else {
             $loanTotalAmount = $loan->loan_amt;
             $loanTotalTerms = $loan->loan_terms;
             $loanStatus = $loan->loan_status;
-
-            // Check if loan is approved
-            if($loanStatus === "PENDING"){
-                return $this->returnErrorRespose("Loan status is PENDING. Please wait till loan is sanctioned.");
+            
+            if($loanStatus === $this::PENDING){
+                return $this->returnResponse(["message"=>"Loan status is PENDING. Please wait till loan is sanctioned."], 400, true);
             }
-            elseif($loanStatus === "PAID"){
-                $loanPendingError = array(
+            if($loanStatus === $this::PAID){
+                $loanPaidError = array(
                     'message' => "Loan has already been paid",
                     "Money Returned back" => "$".$moneySent
                 );
-                $errorOutput = array_merge($loanPendingError, $errorOutput);
-                return response()->json([$errorOutput], 500);
-                
+                return $this->returnResponse($loanPaidError, 400, true);
             }
 
-            // Now, loanStatus is APPROVED.
-            
-            // Retreving the loan payments with status PENDING and ordering them by the payment sequence number.
-            $loanPmts=DB::table('loan_payments')->where([['loan_id', '=', $req->loan_id], ['loan_pmt_status', 'PENDING'],])->orderBy('loan_pmt_sequence')->get();
-
-            // If money sent is less than loan_pmt for the upcoming period => Return ERROR
-            foreach($loanPmts as $i=>$i_value){
-                if($moneySent < $i_value->loan_pmt_amt){
-                    if($i === 0) {
-                        $moneyNotEnoughError = array(
-                            'message' => "Loan repayment failed for term ".$i_value->loan_pmt_sequence.". Money sent is less than loan payment due which is $". $i_value->loan_pmt_amt,
-                            'Loan payment due date' => $i_value->loan_pmt_date,
-                            'loan due' => "$". $i_value->loan_pmt_amt,
-                            'loan payment status' => $i_value->loan_pmt_status
-                        );
-                        $errorOutput = array_merge($moneyNotEnoughError,$errorOutput);
-                        return response()->json([$errorOutput], 500);
-                    }
-                    else {
-                        DB::beginTransaction();
-                        try {
-                            $loanPmt = LoanPayment::find($i_value->loan_pmt_id);
-                            $loanPmt->loan_pmt_amt = number_format(($i_value->loan_pmt_amt-$moneySent ), 2, '.', '');
-                            $loanPmt->save();
-                            DB::commit();
-                            $nextLoanTermDetails = array(
-                                'Loan Term'=>$i_value->loan_pmt_sequence,
-                                'Loan Due on' => $i_value->loan_pmt_date,
-                                'Loan Due Amount' => $loanPmt->loan_pmt_amt
-                            );
-                            $successOutput = array_merge($successOutput,$nextLoanTermDetails);
-                            return response()->json([$successOutput], 201);
-                        }
-                        catch(\Exception $e) {
-                            DB::rollBack();
-                            return $this->returnErrorRespose($e->getMessage());
-                        } 
-                    }
-                }
-                elseif($moneySent === $i_value->loan_pmt_amt){
-                   DB::beginTransaction();
-                   
-                   try{
-                       $loanPmt = LoanPayment::find($i_value->loan_pmt_id);
-                       $loanPmt->loan_pmt_amt = $i_value->loan_pmt_amt - $moneySent;
-                       $loanPmt->loan_pmt_status = "PAID";
-                        // Checking if all the loan dues are paid.
-                       if($i_value->loan_pmt_sequence === $loanTotalTerms){
-                           $loan = Loan::find($i_value->loan_id);
-                           $loan->loan_status = "PAID";
-                           $loan->save();
-                           $fullLoanPaid = array(
-                               'loan completed'=> "All loan dues are PAID.",
-                               'Loan Completed Details' => $loan
-                           );
-                           $successOutput = array_merge($fullLoanPaid,$successOutput);
-                       }
-                       $loanPmt->save();
-
-                       DB::commit();
-                       $loanPaid = array (
-                           'message'=>"Loan due for term ".$i_value->loan_pmt_sequence." of amount $". $i_value->loan_pmt_amt." has been paid successfully.",
-                           'Loan Term Payment Details' => $loanPmt
-                       );
-                       $successOutput = array_merge($loanPaid,$successOutput);
-                       return response()->json([$successOutput], 201);
-                   } catch(\Exception $e) {
-                       DB::rollBack();
-                       return $this->returnErrorRespose($e->getMessage());
-                   }
-               }
-               elseif($moneySent > $i_value->loan_pmt_amt){
-                   DB::beginTransaction();
-                   try {
-                       $loanPmt = LoanPayment::find($i_value->loan_pmt_id);
-                       $loanPmt->loan_pmt_amt = 0.00;
-                       $loanPmt->loan_pmt_status = "PAID";
-                       
-                       // Updating the remaining money the user sent
-                       $moneySent = number_format(($moneySent - $i_value->loan_pmt_amt), 2, '.', '');
-                       if($i_value->loan_pmt_sequence === $loanTotalTerms){
-                           $loan = Loan::find($i_value->loan_id);
-                           $loan->loan_status = "PAID";
-                           $loan->save();
-                           $fullLoanPaid = array(
-                               'loan completed'=> "All loan dues are PAID.",
-                               'Money Returned'=>$moneySent,
-                               'Loan Completed Details' => $loan,
-                               'Loan Completed Details' => $loan
-                           );
-                           
-                           $successOutput = array_merge($fullLoanPaid,$successOutput);
-                       }
-                       else {
-                        $loanPmt->save();
-                        DB::commit();
-                        $loanPaid = array (
-                            'message'=>"Loan due for term ".$i_value->loan_pmt_sequence." of amount $". $i_value->loan_pmt_amt." has been paid successfully.",
-                            'Loan Term Payment Details' => $loanPmt
-                        );
-                        $successOutput = array_merge($loanPaid,$successOutput);
-                        continue;
-                       }
-                       $loanPmt->save();
-                       DB::commit();
-                       
-                       $loanPaid = array (
-                           'message'=>"Loan due for term ".$i_value->loan_pmt_sequence." of amount $". $i_value->loan_pmt_amt." has been paid successfully.",
-                           'Loan Term Payment Details'=>$loanPmt,
-                       );
-                       $successOutput = array_merge($loanPaid,$successOutput);
-                       return response()->json([$successOutput], 201);
-                       
-                   } catch(\Exception $e){
-                       DB::rollBack();
-                        return $this->returnErrorRespose($e->getMessage());
-                   }
-               }
-            }
-        }
         
+            $loanPmts = LoanPayment::where([['loan_id', '=', $req->loan_id], ['loan_pmt_status', 'PENDING'],])->orderBy('loan_pmt_sequence')->get();
+            $loanPmtCount = count($loanPmts);
+
+            $fullyPaidMsg = " ";
+            $partiallyPaidMsg = " ";
+            $loanClosedMsg = " ";
+
+            for($idx=0; $idx<$loanPmtCount; $idx++){
+                $currLoanPmt = $loanPmts[$idx];
+
+                if($moneySent <= 0){
+                    break;
+                }
+                if($idx==$this::FIRSTROW and $moneySent<$currLoanPmt->loan_pmt_amt){
+                    $moneyNotEnoughError = array(
+                        'message' => "Loan repayment failed for term ".$currLoanPmt->loan_pmt_sequence,
+                        'Loan payment due date' => $currLoanPmt->loan_pmt_date,
+                        'loan due' => "$". $currLoanPmt->loan_pmt_amt,
+                        'loan payment status' => $currLoanPmt->loan_pmt_status
+                    );
+                    return $this->returnResponse([$moneyNotEnoughError], 400, true);
+                }
+                $moneySent = number_format(($moneySent -$currLoanPmt->loan_pmt_amt), 2, '.', '');
+                if($moneySent>=0){
+                    $currLoanPmt->loan_pmt_amt = 0;
+                    $currLoanPmt->loan_pmt_status = $this::PAID;
+                    $fullyPaidMsg = $fullyPaidMsg."Term ".$currLoanPmt->loan_pmt_sequence.", ";
+                }
+                else {
+                    $currLoanPmt->loan_pmt_amt=abs(number_format(($moneySent),2, '.', ''));
+                    $partiallyPaidMsg = $partiallyPaidMsg."Term ".$currLoanPmt->loan_pmt_sequence;
+                }
+                $currLoanPmt->save();
+            }
+            if($idx>=$loanPmtCount and $moneySent>=0){
+                $loan->loan_status = $this::PAID;
+                $loan->save();
+                $loanClosedMsg = $loanClosedMsg."Loan fully paid. Money Returned: $".$moneySent;
+            }
+            DB::commit();
+            return $this->returnResponse(["Fully Paid Term(s)"=>$fullyPaidMsg, "Partially Paid Term"=>$partiallyPaidMsg, "Loan closed"=>$loanClosedMsg], 200, false);
+        }
+        catch(\Exception $e) {
+            DB::rollBack();
+            return $this->returnResponse(["SQL Exception"=>$e->getMessage()], 500, true);
+            
+        } 
     }
 }
