@@ -29,7 +29,7 @@ Please follow the following steps to install this app.
 git clone https://github.com/Nithiya99/loan-api.git
 composer update
 ```
-Add .env and update database name (`DB_DATABASE`), username (`DB_USERNAME`) and password (`DB_PASSWORD`). <br>
+Add .env and update database name (`DB_DATABASE`)[I have used 'loanDB' as myu database name], username (`DB_USERNAME`) and password (`DB_PASSWORD`). <br>
 Note: The format of the .env file can be copied from '.env.example' file.
 ```
 php artisan migrate:fresh --seed
