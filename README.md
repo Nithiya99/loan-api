@@ -14,6 +14,10 @@ Mini-Aspire API is an app that allows authenticated users to go through a loan a
 2. Admin approve loan
 3. Fill in the rest
 
+> In this coding challenge, I have assumed the users which exist the in 'users' table are authenticated users. [^1]
+
+[^1]: user_type = 'Client' -> Customer and usert_type = 'Admin' => Admin
+
 ## Installation
 Please follow the following steps fto install this app.
 
@@ -33,8 +37,9 @@ php artisan serve
 ```
 
 ## Documentation
+This app has been developed with the **Laravel 9** framework. **MySQL** has been used as the backend database. [Click here]() to view details such as database design.
+
 Detailed information of all the APIs are provided here:
-[I'm an inline-style link](https://www.google.com)
 1. [Customer Submit Loan Request](https://github.com/Nithiya99/loan-api/blob/master/Documentation/CustomerCreateLoanAPI.md)
 2. [Admin Approve Loan Request](https://github.com/Nithiya99/loan-api/blob/master/Documentation/AdminApproveLoanAPI.md)
 3. [Customer View Loans that Belong to him](https://github.com/Nithiya99/loan-api/blob/master/Documentation/CustomerViewLoanAPI.md)
