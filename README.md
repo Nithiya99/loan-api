@@ -33,8 +33,11 @@ php artisan serve
 ```
 
 ## Documentation
-This documentation contains all the specifics of the app.
-https://github.com/Nithiya99/loan-api/blob/master/APIs.md
+Detailed information of all the APIs are provided here:
+1. [Customer Submit Loan Request] (https://github.com/Nithiya99/loan-api/blob/master/Documentation/CustomerCreateLoanAPI.md)
+2. [Admin Approve Loan Request] (https://github.com/Nithiya99/loan-api/blob/master/Documentation/AdminApproveLoanAPI.md)
+3. [Customer View Loans that Belong to him] (https://github.com/Nithiya99/loan-api/blob/master/Documentation/CustomerViewLoanAPI.md)
+4. [Customer Repay Loan] (https://github.com/Nithiya99/loan-api/blob/master/Documentation/RepayLoanAPI.md)
 
 ## License
 
