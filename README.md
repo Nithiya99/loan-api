@@ -35,13 +35,14 @@ Note: The format of the .env file can be copied from '.env.example' file.
 php artisan migrate:fresh --seed
 php artisan serve
 ```
+The Aspire-Mini API should be succeffully running now and the users table will be populated with 5 Clients (customers) and 2 Admins. All the routes can be tested using postman or any other similar API testing tool. Click here to get [All postman routes](https://www.getpostman.com/collections/e4ca0dce5efc0025e81f). <br>
+> Note: Please make sure MySQL server is also running before testing the routes.
 
 ## Documentation
 This app has been developed with the **Laravel 9** framework. **MySQL** has been used as the backend database. [Click here](https://github.com/Nithiya99/loan-api/blob/master/Documentation/Mini-Aspire%20API%20Documentation.pdf) to view details such as database design and design choices.
 
 ![alt text](https://github.com/Nithiya99/loan-api/blob/master/Documentation/Images/QuickDBD-export.png "LoansDB Schema") <br>
 
-Click here to get [All postman routes](https://www.getpostman.com/collections/e4ca0dce5efc0025e81f) 
 
 Detailed information of all the APIs are provided here:
 1. [Customer Submit Loan Request](https://github.com/Nithiya99/loan-api/blob/master/Documentation/CustomerCreateLoanAPI.md)
