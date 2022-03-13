@@ -20,9 +20,11 @@ Please follow the following steps to install this app.
 
 ### System Pre-requisites
 1. PHP **version 8.0** or above. (https://www.apachefriends.org/download.html)
+2. MySQL 
 2. Composer (https://getcomposer.org/download/)
 3. git - to colne the repository from command line
 4. Postman - to test the APIs
+> An easy way to get both PHP and MySQL server is through XAMPP.
 
 ### Project Installation Commands
 ```
