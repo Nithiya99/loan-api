@@ -8,7 +8,7 @@
   
 **URL Params**: None
 
-**Request Body**
+**Request Body**: Pass in the Admin's ID and the loans ID. If all checks passes, the loan's status will be changed to APPROVED.
 
 *  **Required:**
  
