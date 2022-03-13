@@ -1,7 +1,7 @@
 **Customer Create Loan**
 ----
   Authenticated customer can send a loan request. <br>
-  &nbsp;&nbsp;&nbsp; If customer exists in 'users' table, the customer is an authenticated customer.
+  &nbsp;&nbsp;&nbsp; For this app, it is assumed that if the customer exists in the 'users' table, he/she is authenticated. In normal scenario, the user will be checked if he is valid through their session token.
 
  **URL**: /loan
 
@@ -9,11 +9,11 @@
   
 **URL Params**: None
 
-**Data Params**
+**Request Body**
 
 *  **Required:**
  
-   `loan_amount=[decimal]` `loan_terms=[int]` `cust_id=[uuid]`
+   `loan_amount=[decimal]` `loan_terms=[int]` `cust_id=[string]`
 
 **Sample Call:**
 
@@ -44,13 +44,15 @@
  
 **Error Response:**
 
-```json
-    {
-        "message": "No User Found",
-        "error": true,
-        "code": 400
-    }
-```
+* Customer not found error
+
+    ```json
+        {
+            "message": "No User Found",
+            "error": true,
+            "code": 400
+        }
+    ```
 OR
 
 ```json
