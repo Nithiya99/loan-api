@@ -38,8 +38,8 @@ class LoanController extends Controller
 
         // Validating inputs
         $rules = array(
-             "loan_amt"=>"required|max:8",
-             "loan_terms"=>"required",
+             "loan_amt"=>"required|max:8|gt:0",
+             "loan_terms"=>"required|gt:0",
              "cust_id"=>"required"
         );
         $validator = Validator::make($req->all(), $rules);
