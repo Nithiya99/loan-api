@@ -19,7 +19,7 @@
 
   ```json
     {
-        "loan_amt": "50",
+        "loan_amt": "500",
         "loan_terms": 3,
         "cust_id": "8d68e317-d1fb-41ea-8007-a59cbcf0e25f"
     }
@@ -30,13 +30,17 @@
 * **Message:**
 ```json
     {
-        "loan_amt": "50",
-        "loan_terms": 3,
-        "loan_status": "PENDING",
-        "cust_id": "8d68e317-d1fb-41ea-8007-a59cbcf0e25f",
-        "loan_id": "cbad1dc3-77a9-40f8-9ee1-90cf1fecdfc1",
-        "updated_at": "2022-03-13T02:30:51.000000Z",
-        "created_at": "2022-03-13T02:30:51.000000Z"
+        "message": {
+            "loan_amt": "500",
+            "loan_terms": 3,
+            "loan_status": "PENDING",
+            "cust_id": "8d68e317-d1fb-41ea-8007-a59cbcf0e25f",
+            "loan_id": "0f0b71a2-0a5e-4ba6-a754-6e12b97876a3",
+            "updated_at": "2022-03-13T02:45:52.000000Z",
+            "created_at": "2022-03-13T02:45:52.000000Z"
+        },
+        "error": false,
+        "code": 200
     }
 ```
 * **Error:** false <br />
@@ -47,13 +51,28 @@
 * **Validation Errors:** 
     ```json
         {
-            "loan_amt": [
-                "The loan amt must not be greater than 8 characters."
-            ]
+            "Validation Errors": {
+                "loan_amt": [
+                    "The loan amt must not be greater than 8 characters."
+                ]
+            },
+            "error": true,
+            "code": 400
         }
     ```
 *   **Error:** true <br />
 *   **Code:** 400 <br />
+
+  OR
+
+*   **Message:** 
+    ```json
+    {
+        "message": "No User Found",
+        "error": true,
+        "code": 400
+    }
+    ```
     
 
   OR
