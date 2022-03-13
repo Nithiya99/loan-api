@@ -14,9 +14,9 @@ Mini-Aspire API is an app that allows authenticated users to go through a loan a
 2. Admin approve loan
 3. Fill in the rest
 
-> In this coding challenge, I have assumed the users which exist the in 'users' table are authenticated users. [^1]
+> In this coding challenge, I have assumed the users which exist the in 'users' table are authenticated users. [^1] I would check if the user is authenticated through their session token in real world scenario.
 
-[^1]: user_type = 'Client' -> Customer and usert_type = 'Admin' => Admin
+[^1]: user_type = 'Client' -> Customer and user_type = 'Admin' => Admin
 
 ## Installation
 Please follow the following steps fto install this app.
