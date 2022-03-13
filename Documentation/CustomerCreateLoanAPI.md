@@ -9,9 +9,9 @@
   
 **URL Params**: None
 
-* **Data Params**
+**Data Params**
 
-  **Required:**
+*  **Required:**
  
    `loan_amount=[decimal]` `loan_terms=[int]` `cust_id=[uuid]`
 
@@ -27,7 +27,7 @@
 
 **Success Response:**
 
- **Message:**
+* **Message:**
 ```json
     {
         "loan_amt": "50",
@@ -39,12 +39,12 @@
         "created_at": "2022-03-13T02:30:51.000000Z"
     }
 ```
- **Error:** false <br />
- **Code:** 200 <br />
+* **Error:** false <br />
+* **Code:** 200 <br />
  
-* **Error Response:**
+**Error Response:**
 
-     **Validation Errors:** 
+* **Validation Errors:** 
     ```json
         {
             "loan_amt": [
@@ -52,16 +52,16 @@
             ]
         }
     ```
-     **Error:** true <br />
-     **Code:** 400 <br />
+*   **Error:** true <br />
+*   **Code:** 400 <br />
     
 
   OR
 
-     **Validation Errors:** 
+*   **Validation Errors:** 
     ```
     {SQL Error:....}
     ```
-     **Error:** true <br />
-     **Code:** 500 <br />
+*   **Error:** true <br />
+*   **Code:** 500 <br />
 
