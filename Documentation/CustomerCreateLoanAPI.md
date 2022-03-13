@@ -53,7 +53,9 @@
             "code": 400
         }
     ```
-OR
+    OR
+
+* Validation Errors: Will be returned if any of the required fields are null or if the `loan_amt` requested is more than $10,000000.00.
 
 ```json
     {
@@ -69,7 +71,7 @@ OR
 ```
     
 
-OR
+* If there is any error with the database, an SQL Exception Error will be returned.
 
 ```json
     {
