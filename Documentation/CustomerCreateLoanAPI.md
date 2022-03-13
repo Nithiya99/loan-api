@@ -46,8 +46,8 @@
 
     ```json
         {
-            "Validation Errors": {
-                "loan_amt": [
+            "Validation Errors":{
+                "loan_amt":[
                     "The loan amt must not be greater than 8 characters."
                 ]
             },
