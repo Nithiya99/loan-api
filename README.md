@@ -28,7 +28,10 @@ Please follow the following steps to install this app.
 ```
 git clone https://github.com/Nithiya99/loan-api.git
 composer update
-add .env and update database settings
+```
+Add .env and update database name (`DB_DATABASE`), username (`DB_USERNAME`) and password (`DB_PASSWORD`). <br>
+Note: The format of the .env file can be copied from '.env.example' file.
+```
 php artisan migrate:fresh --seed
 php artisan serve
 ```
@@ -38,7 +41,7 @@ This app has been developed with the **Laravel 9** framework. **MySQL** has been
 
 ![alt text](https://github.com/Nithiya99/loan-api/blob/master/Documentation/Images/QuickDBD-export.png "LoansDB Schema") <br>
 
-[All postman routes](https://www.getpostman.com/collections/e4ca0dce5efc0025e81f) 
+Click here to get [All postman routes](https://www.getpostman.com/collections/e4ca0dce5efc0025e81f) 
 
 Detailed information of all the APIs are provided here:
 1. [Customer Submit Loan Request](https://github.com/Nithiya99/loan-api/blob/master/Documentation/CustomerCreateLoanAPI.md)
