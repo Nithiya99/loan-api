@@ -37,7 +37,7 @@ php artisan serve
 ```
 
 ## Documentation
-This app has been developed with the **Laravel 9** framework. **MySQL** has been used as the backend database. [Click here](https://docs.google.com/document/d/1fnjnsGpd_vncv9gOlIz_gnP_J5-9EbJfUAUfeZvWAd4/edit?usp=sharing) to view details such as database design and design choices.
+This app has been developed with the **Laravel 9** framework. **MySQL** has been used as the backend database. [Click here](https://github.com/Nithiya99/loan-api/blob/master/Documentation/Mini-Aspire%20API%20Documentation.pdf) to view details such as database design and design choices.
 
 ![alt text](https://github.com/Nithiya99/loan-api/blob/master/Documentation/Images/QuickDBD-export.png "LoansDB Schema") <br>
 
