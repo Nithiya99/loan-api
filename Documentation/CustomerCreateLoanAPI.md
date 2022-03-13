@@ -1,48 +1,66 @@
 **Customer Create Loan**
 ----
-  Authenticated customer can send a loan request.
+  Authenticated customer can send a loan request. <br>
   &nbsp;&nbsp;&nbsp; If customer exists in 'users' table, the customer is an authenticated customer.
 
  **URL**: /loan
 
-* **Method:**
-
-  `POST`
+**Method:**:  `POST`
   
-*  **URL Params** None
-
-   **Required:**
- 
-   `loan_amount=[decimal]` `loan_terms=[int]` `cust_id=[uuid]`
+**URL Params**: None
 
 * **Data Params**
 
-  None
+  **Required:**
+ 
+   `loan_amount=[decimal]` `loan_terms=[int]` `cust_id=[uuid]`
 
-* **Success Response:**
+**Sample Call:**
 
-  * **Code:** 200 <br />
-    **Content:** `{ id : 12, name : "Michael Bloom" }`
+  ```json
+    {
+        "loan_amt": "50",
+        "loan_terms": 3,
+        "cust_id": "8d68e317-d1fb-41ea-8007-a59cbcf0e25f"
+    }
+  ```
+
+**Success Response:**
+
+&nbsp;&nbsp;&nbsp **Message:**
+```json
+    {
+        "loan_amt": "50",
+        "loan_terms": 3,
+        "loan_status": "PENDING",
+        "cust_id": "8d68e317-d1fb-41ea-8007-a59cbcf0e25f",
+        "loan_id": "cbad1dc3-77a9-40f8-9ee1-90cf1fecdfc1",
+        "updated_at": "2022-03-13T02:30:51.000000Z",
+        "created_at": "2022-03-13T02:30:51.000000Z"
+    }
+```
+&nbsp;&nbsp;&nbsp **Error:** false <br />
+&nbsp;&nbsp;&nbsp **Code:** 200 <br />
  
 * **Error Response:**
 
-  * **Code:** 404 NOT FOUND <br />
-    **Content:** `{ error : "User doesn't exist" }`
+    &nbsp;&nbsp;&nbsp**Validation Errors:** 
+    ```json
+        {
+            "loan_amt": [
+                "The loan amt must not be greater than 8 characters."
+            ]
+        }
+    ```
+    &nbsp;&nbsp;&nbsp**Error:** true <br />
+    &nbsp;&nbsp;&nbsp**Code:** 400 <br />
+    
 
   OR
 
-  * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{ error : "You are unauthorized to make this request." }`
+    &nbsp;&nbsp;&nbsp**Validation Errors:** 
+    ```SQL Error:....
+    ```
+    &nbsp;&nbsp;&nbsp**Error:** true <br />
+    &nbsp;&nbsp;&nbsp**Code:** 500 <br />
 
-* **Sample Call:**
-
-  ```javascript
-    $.ajax({
-      url: "/users/1",
-      dataType: "json",
-      type : "GET",
-      success : function(r) {
-        console.log(r);
-      }
-    });
-  ```
