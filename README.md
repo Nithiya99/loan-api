@@ -9,17 +9,14 @@
 
 # Mini-Aspire API
 
-Mini-Aspire API is an app that allows authenticated users to go through a loan application. This app contains REST APIs for the following features:
-1. Customer create a loan
-2. Admin approve loan
-3. Fill in the rest
+Mini-Aspire API is an app that allows authenticated users to go through a loan application. [Click here to jump to documentation](https://github.com/Nithiya99/loan-api#documentation)
 
 > In this coding challenge, I have assumed the users which exist the in 'users' table are authenticated users. [^1] I would check if the user is authenticated through their session token in real world scenario.
 
 [^1]: user_type = 'Client' -> Customer and user_type = 'Admin' => Admin
 
 ## Installation
-Please follow the following steps fto install this app.
+Please follow the following steps to install this app.
 
 ### System Pre-requisites
 1. PHP **version 8.0** or above. (https://www.apachefriends.org/download.html)
