@@ -57,19 +57,20 @@
 
 * Validation Errors: Will be returned if any of the required fields are null or if the `loan_amt` requested is more than $10,000000.00.
 
-```json
-    {
-        "Validation Errors":{
-            "loan_amt":[
-                "The loan amt must not be greater than 8 characters."
-            ]
-        },
-        "error": true,
-        "code": 400
-    }
-    
-```
-    
+    ```json
+        {
+            "Validation Errors":{
+                "loan_amt":[
+                    "The loan amt must not be greater than 8 characters."
+                ]
+            },
+            "error": true,
+            "code": 400
+        }
+        
+    ```
+
+    OR    
 
 * If there is any error with the database, an SQL Exception Error will be returned.
 
