@@ -1,10 +1,9 @@
 **Customer Create Loan**
 ----
-  Customer can send a loan request.
+  Authenticated customer can send a loan request.
+  ⋅⋅⋅ If customer exists in 'users' table, the customer is an authenticated customer.
 
-* **URL**
-
-  /loan
+ **URL**: /loan
 
 * **Method:**
 
