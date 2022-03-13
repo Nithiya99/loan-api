@@ -59,13 +59,13 @@
 
 OR
 
-    ```json
+```json
     {
         "message": "No User Found",
         "error": true,
         "code": 400
     }
-    ```
+```
     
 
   OR
