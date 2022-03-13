@@ -27,7 +27,7 @@
 
 **Success Response:**
 
-&nbsp;&nbsp;&nbsp **Message:**
+ **Message:**
 ```json
     {
         "loan_amt": "50",
@@ -39,12 +39,12 @@
         "created_at": "2022-03-13T02:30:51.000000Z"
     }
 ```
-&nbsp;&nbsp;&nbsp **Error:** false <br />
-&nbsp;&nbsp;&nbsp **Code:** 200 <br />
+ **Error:** false <br />
+ **Code:** 200 <br />
  
 * **Error Response:**
 
-    &nbsp;&nbsp;&nbsp**Validation Errors:** 
+     **Validation Errors:** 
     ```json
         {
             "loan_amt": [
@@ -52,15 +52,16 @@
             ]
         }
     ```
-    &nbsp;&nbsp;&nbsp**Error:** true <br />
-    &nbsp;&nbsp;&nbsp**Code:** 400 <br />
+     **Error:** true <br />
+     **Code:** 400 <br />
     
 
   OR
 
-    &nbsp;&nbsp;&nbsp**Validation Errors:** 
-    ```SQL Error:....
+     **Validation Errors:** 
     ```
-    &nbsp;&nbsp;&nbsp**Error:** true <br />
-    &nbsp;&nbsp;&nbsp**Code:** 500 <br />
+    {SQL Error:....}
+    ```
+     **Error:** true <br />
+     **Code:** 500 <br />
 
