@@ -23,7 +23,7 @@ class LoanController extends Controller
             $data = Loan::where('cust_id', $custId)->get();
 
             if(count($data)===0){
-                return $this->returnResponse(["Loan Found"=>"None - Please check yuor ID"], 400, true);
+                return $this->returnResponse(["Loan Found"=>"None - Please check your ID"], 400, true);
             } else{
                 return $this->returnResponse(["Loan Found"=>$data], 200, false);
             }
