@@ -2,7 +2,7 @@
 ----
   Admin can approve the loan requests submitted by users through this API. <br>
 
- **URL**: http://<\your domain>/api/loan
+ **URL**: `http://<your domain>/api/loan/`
 
 **Method:**:  `PUT`
   

@@ -2,7 +2,7 @@
 ----
   Customer can view all his loans that he has applied for. <br>
 
- **URL**: http://<\your domain>/api/loan
+ **URL**: `http://<your domain>/api/loan/<user_id>`
 
 **Method:**:  `GET`
   
