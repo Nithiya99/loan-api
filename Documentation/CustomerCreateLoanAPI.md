@@ -26,8 +26,6 @@
   ```
 
 **Success Response:**
-
-* **Message:**
 ```json
     {
         "message": {
@@ -43,12 +41,9 @@
         "code": 200
     }
 ```
-* **Error:** false <br />
-* **Code:** 200 <br />
  
 **Error Response:**
 
-* **Validation Errors:** 
     ```json
         {
             "Validation Errors": {
@@ -60,12 +55,9 @@
             "code": 400
         }
     ```
-*   **Error:** true <br />
-*   **Code:** 400 <br />
 
   OR
 
-*   **Message:** 
     ```json
     {
         "message": "No User Found",
@@ -77,7 +69,6 @@
 
   OR
 
-*   **Validation Errors:** 
     ```
     {SQL Error:....}
     ```
