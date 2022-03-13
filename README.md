@@ -36,7 +36,9 @@ php artisan serve
 ## Documentation
 This app has been developed with the **Laravel 9** framework. **MySQL** has been used as the backend database. [Click here](https://docs.google.com/document/d/1fnjnsGpd_vncv9gOlIz_gnP_J5-9EbJfUAUfeZvWAd4/edit?usp=sharing) to view details such as database design and design choices.
 
-![alt text](https://github.com/Nithiya99/loan-api/blob/master/Documentation/Images/QuickDBD-export.png "LoansDB Schema")
+![alt text](https://github.com/Nithiya99/loan-api/blob/master/Documentation/Images/QuickDBD-export.png "LoansDB Schema") <br>
+
+[All postman routes](https://www.getpostman.com/collections/e4ca0dce5efc0025e81f) 
 
 Detailed information of all the APIs are provided here:
 1. [Customer Submit Loan Request](https://github.com/Nithiya99/loan-api/blob/master/Documentation/CustomerCreateLoanAPI.md)
