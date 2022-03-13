@@ -3,7 +3,7 @@
   Authenticated customer can send a loan request. <br>
   &nbsp;&nbsp;&nbsp; For this app, it is assumed that if the customer exists in the 'users' table, he/she is authenticated. In normal scenario, the user will be checked if he is valid through their session token.
 
- **URL**: http://<?your domain>/api/loan
+ **URL**: http://<\your domain>/api/loan
 
 **Method:**:  `POST`
   
